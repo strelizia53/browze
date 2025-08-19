@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>My Start Page</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="greeting" id="greeting">Welcome back 👋</div>
+      <div class="clock" id="clock">--:--</div>
+    </header>
+
+    <div class="search" aria-label="Search the web">
+      <form id="searchForm" role="search">
+        <select id="engine" aria-label="Search engine">
+          <option value="google">Google</option>
+          <option value="ddg">DuckDuckGo</option>
+          <option value="brave">Brave</option>
+          <option value="wiki">Wikipedia</option>
+          <option value="yt">YouTube</option>
+        </select>
+        <input
+          id="q"
+          name="q"
+          type="search"
+          placeholder="Search… ( / to focus )"
+          autocomplete="off"
+        />
+        <button id="go" type="submit">Search</button>
+      </form>
+      <div class="quick-links" id="quickLinks" aria-label="Quick links">
+        <button class="chip" data-url="https://mail.google.com/">Gmail</button>
+        <button class="chip" data-url="https://calendar.google.com/">
+          Calendar
+        </button>
+        <button class="chip" data-url="https://drive.google.com/">Drive</button>
+        <button class="chip" data-url="https://todoist.com/app">Todoist</button>
+        <button class="chip" data-url="https://news.ycombinator.com/">
+          Hacker News
+        </button>
+        <button class="chip" data-url="https://github.com/">GitHub</button>
+      </div>
+    </div>
+
+    <main>
+      <!-- Left column: To-do -->
+      <section class="panel" aria-label="To-do list">
+        <header>
+          <h2>To-do</h2>
+          <div class="actions">
+            <button id="clearDone" class="chip" title="Clear completed">
+              Clear completed
+            </button>
+            <button id="exportTodos" class="chip" title="Export to JSON">
+              Export
+            </button>
+            <input
+              type="file"
+              id="importTodos"
+              accept=".json"
+              title="Import from JSON"
+              style="display: none"
+            />
+            <button id="importTodosBtn" class="chip" title="Import from JSON">
+              Import
+            </button>
+          </div>
+        </header>
+        <div id="todoWrap">
+          <div id="todoAdd">
+            <input id="todoText" placeholder="Add a task… (Enter)" />
+            <input id="todoDate" type="date" />
+            <button id="todoAddBtn" title="Add task">Add</button>
+          </div>
+          <ul id="todoList" aria-live="polite"></ul>
+          <div id="todoEmpty" class="empty" hidden>
+            No tasks yet — add your first one!
+          </div>
+        </div>
+      </section>
+
+      <!-- Right column: Calendar + Upcoming -->
+      <section class="panel" aria-label="Calendar">
+        <header>
+          <h2>Calendar & Deadlines</h2>
+          <div class="actions">
+            <button id="todayBtn" class="chip">Today</button>
+            <button id="exportEvents" class="chip">Export</button>
+            <input
+              type="file"
+              id="importEvents"
+              accept=".json"
+              style="display: none"
+            />
+            <button id="importEventsBtn" class="chip">Import</button>
+          </div>
+        </header>
+        <div id="calWrap">
+          <div class="cal-nav">
+            <button id="prevMonth" class="chip">◀</button>
+            <div id="calLabel" aria-live="polite"></div>
+            <button id="nextMonth" class="chip">▶</button>
+          </div>
+          <div class="cal-grid" id="calGrid"></div>
+          <div class="cal-legend">
+            <div class="legend"><span class="dot green"></span>Due</div>
+            <div class="legend"><span class="dot yellow"></span>Reminder</div>
+            <div class="legend"><span class="dot red"></span>Overdue</div>
+          </div>
+        </div>
+        <div id="upcoming">
+          <h3 style="margin: 8px 0 10px 2px">Upcoming (30 days)</h3>
+          <div id="upcomingList"></div>
+          <div id="upcomingEmpty" class="empty" hidden>
+            No upcoming deadlines—nice!
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Pro tip: press <kbd>/</kbd> to jump to search. Drag tasks to reorder.
+      Everything saves to your browser.
+    </footer>
+
+    <dialog id="eventDialog">
+      <form method="dialog" class="modal" id="eventForm">
+        <h3 id="eventDialogTitle">Add item</h3>
+        <div class="row">
+          <label for="eventTitle">Title</label>
+          <input
+            id="eventTitle"
+            required
+            placeholder="e.g., Project deadline"
+          />
+        </div>
+        <div
+          class="row"
+          style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px"
+        >
+          <div>
+            <label for="eventDate">Date</label>
+            <input id="eventDate" type="date" required />
+          </div>
+          <div>
+            <label for="eventTime">Time (optional)</label>
+            <input id="eventTime" type="time" />
+          </div>
+        </div>
+        <div class="row">
+          <label for="eventType">Type</label>
+          <select id="eventType">
+            <option value="due">Due</option>
+            <option value="reminder">Reminder</option>
+          </select>
+        </div>
+        <div class="row">
+          <label for="eventNotes">Notes</label>
+          <textarea
+            id="eventNotes"
+            rows="3"
+            placeholder="Details, links, etc."
+          ></textarea>
+        </div>
+        <div class="modal-actions">
+          <button class="btn danger" value="delete" id="deleteEventBtn" hidden>
+            Delete
+          </button>
+          <button class="btn" value="cancel">Cancel</button>
+          <button class="btn primary" value="save">Save</button>
+        </div>
+        <input type="hidden" id="eventId" />
+      </form>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
