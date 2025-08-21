@@ -35,6 +35,42 @@ body {
   min-height: 100svh;
 }
 
+body.bg-animate::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    -45deg,
+    var(--accent),
+    var(--accent-2),
+    var(--danger),
+    var(--accent)
+  );
+  background-size: 400% 400%;
+  animation: bg-shift 60s ease infinite;
+  opacity: 0.35;
+}
+
+@keyframes bg-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.bg-animate::before {
+    animation: none;
+  }
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
