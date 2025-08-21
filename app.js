@@ -37,6 +37,25 @@ const KEYS = {
   settings: "startpage.settings.v1",
 };
 
+/* ====== Background animation toggle ====== */
+const settings = store.get(KEYS.settings, { animateBg: true });
+document.body.classList.toggle("bg-animate", settings.animateBg);
+
+const bgToggleBtn = document.createElement("button");
+bgToggleBtn.id = "toggleBg";
+bgToggleBtn.className = "chip";
+bgToggleBtn.textContent = settings.animateBg ? "Disable motion" : "Enable motion";
+document.body.appendChild(bgToggleBtn);
+
+bgToggleBtn.addEventListener("click", () => {
+  settings.animateBg = !settings.animateBg;
+  document.body.classList.toggle("bg-animate", settings.animateBg);
+  bgToggleBtn.textContent = settings.animateBg
+    ? "Disable motion"
+    : "Enable motion";
+  store.set(KEYS.settings, settings);
+});
+
 /* ====== Greeting & clock (time-aware, includes name) ====== */
 function greetingForHour(h) {
   if (h < 12) return "Good morning";
