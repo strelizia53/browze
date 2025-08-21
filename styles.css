@@ -2,13 +2,13 @@
 
 :root {
   --bg: #0f1115;
-  --panel: rgba(21, 25, 35, 0.8);
+  --panel: rgba(255, 255, 255, 0.08);
   --muted: #8b93a7;
   --text: #e6eaf2;
   --accent: #6aa6ff;
   --accent-2: #9bdb97;
   --danger: #ff6b6b;
-  --border: #232836;
+  --border: rgba(255, 255, 255, 0.15);
   --shadow: 0 6px 24px rgba(0, 0, 0, 0.25), 0 2px 8px rgba(0, 0, 0, 0.2);
   --radius: 14px;
 }
@@ -136,7 +136,7 @@ form#searchForm {
   border-radius: 999px;
   padding: 10px 12px;
   box-shadow: var(--shadow);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(12px);
 }
 #engine {
   appearance: none;
@@ -188,6 +188,13 @@ form#searchForm {
   transform: translateY(-2px);
 }
 
+#toggleBg {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  z-index: 1000;
+}
+
 /* Main content fills remaining height */
 main {
   padding: 0 clamp(16px, 4vw, 36px) 36px;
@@ -233,7 +240,7 @@ section.panel {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(16px) saturate(180%);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
@@ -257,6 +264,26 @@ section.panel header h2 {
 section.panel header .actions {
   display: flex;
   gap: 8px;
+}
+
+@media (max-width: 480px) {
+  main {
+    padding: 0 12px 24px;
+    gap: 12px;
+  }
+  section.panel header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  section.panel header .actions {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .quick-links .chip {
+    flex: 1 1 calc(50% - 8px);
+    text-align: center;
+  }
 }
 
 /* To-do */
@@ -444,7 +471,8 @@ section.panel header .actions {
   padding: 10px;
   border: 1px solid var(--border);
   border-radius: 10px;
-  background: #111624;
+  background: var(--panel);
+  backdrop-filter: blur(8px);
   margin-bottom: 8px;
 }
 .up-item time {
@@ -458,9 +486,10 @@ section.panel header .actions {
 
 /* Modal */
 dialog {
-  border: none;
+  border: 1px solid var(--border);
   border-radius: 14px;
-  background: #0f1320;
+  background: var(--panel);
+  backdrop-filter: blur(12px);
   color: var(--text);
   box-shadow: var(--shadow);
   max-width: 520px;

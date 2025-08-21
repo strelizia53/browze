@@ -42,12 +42,7 @@ const settings = store.get(KEYS.settings, { animateBg: true });
 document.body.classList.toggle("bg-animate", settings.animateBg);
 
 const bgToggleBtn = document.createElement("button");
-bgToggleBtn.id = "toggleBg";
-bgToggleBtn.className = "chip";
-bgToggleBtn.textContent = settings.animateBg ? "Disable motion" : "Enable motion";
-bgToggleBtn.style.position = "fixed";
-bgToggleBtn.style.bottom = "10px";
-bgToggleBtn.style.right = "10px";
+
 document.body.appendChild(bgToggleBtn);
 
 bgToggleBtn.addEventListener("click", () => {
