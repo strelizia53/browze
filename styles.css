@@ -329,6 +329,7 @@ section.panel header .actions {
 .todo-group {
   font-weight: 600;
   margin-top: 10px;
+  cursor: pointer;
 }
 .todo {
   display: grid;

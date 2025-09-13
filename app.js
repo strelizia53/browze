@@ -35,6 +35,7 @@ const KEYS = {
   todos: "startpage.todos.v1",
   events: "startpage.events.v1",
   settings: "startpage.settings.v1",
+  todoGroups: "startpage.todoGroups.v1",
 };
 
 /* ====== Background animation toggle ====== */
@@ -114,6 +115,7 @@ window.addEventListener("keydown", (e) => {
 
 /* ====== To-do ====== */
 let todos = store.get(KEYS.todos, []);
+let groupState = store.get(KEYS.todoGroups, {});
 const listEl = $("#todoList");
 const emptyEl = $("#todoEmpty");
 
@@ -140,11 +142,18 @@ function renderTodos() {
       if (group) {
         const heading = document.createElement("li");
         heading.className = "todo-group";
-        heading.textContent = group;
+        heading.dataset.group = group;
+        heading.textContent = (groupState[group] ? "\u25B6 " : "\u25BC ") + group;
+        heading.addEventListener("click", () => {
+          groupState[group] = !groupState[group];
+          store.set(KEYS.todoGroups, groupState);
+          renderTodos();
+        });
         listEl.appendChild(heading);
       }
       currentGroup = group;
     }
+    if (group && groupState[group]) continue;
     const li = document.createElement("li");
     li.className = "todo" + (t.done ? " done" : "");
     li.draggable = true;
