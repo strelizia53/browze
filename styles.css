@@ -230,6 +230,7 @@ main {
     grid-template-columns: 1fr;
   }
   #todoDate,
+  #todoGroup,
   #todoAdd button {
     width: 100%;
   }
@@ -293,12 +294,13 @@ section.panel header .actions {
 }
 #todoAdd {
   display: grid;
-  grid-template-columns: 1fr 120px 44px;
+  grid-template-columns: 1fr 120px 120px 44px;
   gap: 8px;
   margin-bottom: 10px;
 }
 #todoText,
-#todoDate {
+#todoDate,
+#todoGroup {
   background: #0f1320;
   color: var(--text);
   border: 1px solid var(--border);
@@ -323,6 +325,11 @@ section.panel header .actions {
   padding: 0;
   display: grid;
   gap: 6px;
+}
+.todo-group {
+  font-weight: 600;
+  margin-top: 10px;
+  cursor: pointer;
 }
 .todo {
   display: grid;

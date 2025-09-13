@@ -35,6 +35,7 @@ const KEYS = {
   todos: "startpage.todos.v1",
   events: "startpage.events.v1",
   settings: "startpage.settings.v1",
+  todoGroups: "startpage.todoGroups.v1",
 };
 
 /* ====== Background animation toggle ====== */
@@ -114,6 +115,7 @@ window.addEventListener("keydown", (e) => {
 
 /* ====== To-do ====== */
 let todos = store.get(KEYS.todos, []);
+let groupState = store.get(KEYS.todoGroups, {});
 const listEl = $("#todoList");
 const emptyEl = $("#todoEmpty");
 
@@ -125,14 +127,33 @@ function renderTodos() {
   } else {
     emptyEl.hidden = true;
   }
-  const order = { 0: 0, 1: 1, 2: 2, 3: 3 };
   const sorted = [...todos].sort((a, b) => {
+    if ((a.group || "") !== (b.group || ""))
+      return (a.group || "").localeCompare(b.group || "");
     if (a.done !== b.done) return a.done ? 1 : -1;
     if ((b.priority || 1) !== (a.priority || 1))
       return (b.priority || 1) - (a.priority || 1);
     return (a.due || "9999-12-31").localeCompare(b.due || "9999-12-31");
   });
+  let currentGroup;
   for (const t of sorted) {
+    const group = t.group || "";
+    if (group !== currentGroup) {
+      if (group) {
+        const heading = document.createElement("li");
+        heading.className = "todo-group";
+        heading.dataset.group = group;
+        heading.textContent = (groupState[group] ? "\u25B6 " : "\u25BC ") + group;
+        heading.addEventListener("click", () => {
+          groupState[group] = !groupState[group];
+          store.set(KEYS.todoGroups, groupState);
+          renderTodos();
+        });
+        listEl.appendChild(heading);
+      }
+      currentGroup = group;
+    }
+    if (group && groupState[group]) continue;
     const li = document.createElement("li");
     li.className = "todo" + (t.done ? " done" : "");
     li.draggable = true;
@@ -211,20 +232,37 @@ function renderTodos() {
     else listEl.insertBefore(dragging, after);
   });
 }
-function addTodo(text, due) {
-  todos.push({ id: toKey(), text, due: due || null, done: false, priority: 1 });
+function addTodo(text, due, group) {
+  todos.push({
+    id: toKey(),
+    text,
+    due: due || null,
+    group: group || null,
+    done: false,
+    priority: 1,
+  });
   store.set(KEYS.todos, todos);
   renderTodos();
 }
 $("#todoAddBtn").addEventListener("click", () => {
   const text = $("#todoText").value.trim();
   if (!text) return;
-  addTodo(text, $("#todoDate").value || null);
+  addTodo(
+    text,
+    $("#todoDate").value || null,
+    $("#todoGroup").value.trim() || null
+  );
   $("#todoText").value = "";
   $("#todoDate").value = "";
+  $("#todoGroup").value = "";
   $("#todoText").focus();
 });
 $("#todoText").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    $("#todoAddBtn").click();
+  }
+});
+$("#todoGroup").addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     $("#todoAddBtn").click();
   }
